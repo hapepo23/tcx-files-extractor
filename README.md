@@ -4,13 +4,13 @@
 
 -----
 
-This console application, programmed in Free Pascal, extracts all essential activity information from all TCX files in the specified directories.
+This console application, programmed in Free Pascal, extracts all essential activity information from all TCX files in the specified directories. It processes 1,500 TCX files in 45 seconds (ThinkPad T14 Gen1, Intel Core i7-10610U CPU).
 
 Usage:
 
     ./tcx_files_extractor <directory-1> <directory-2> ... <directory-n>
 
-Screenshot Linux:
+Screenshot Linux (Walking activities):
 
 ![Screenshot](screenshot.png)
 
