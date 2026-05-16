@@ -1,6 +1,6 @@
 FPC = fpc
 
-FPCFLAGS = -B -Sh -Mobjfpc -vnlw -O2 -Xs -XX -Fu/usr/share/lazarus/4.6.0/components/lazutils/lib/x86_64-linux
+FPCFLAGS = -B -Sh -Mobjfpc -vnlw -O2 -Xs -XX 
 
 TARGETS = tcx_files_extractor
 

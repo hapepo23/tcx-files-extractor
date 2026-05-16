@@ -90,6 +90,15 @@ begin
   Result := FormatDateTime('hh:nn:ss', time);
 end;
 
+function GetActivityMovingTimeHMS(out imovsecs: integer): string;
+var
+  time: TDateTime;
+begin
+  imovsecs := Round(Data.moving_secs);
+  time := imovsecs / 86400.0;
+  Result := FormatDateTime('hh:nn:ss', time);
+end;
+
 function GetActivityCalories(out cals: double): string;
 var
   i: integer;
@@ -166,6 +175,7 @@ var
   startdt, enddt: TDateTime;
   dist: double;
   secs: integer;
+  movsecs: integer;
   cals: double;
   avghr: double;
   avgcad: double;
@@ -182,14 +192,18 @@ begin
   writeln('Activity Start : ', GetActivityStartDateTime(startdt));
   writeln('Activity End   : ', GetActivityEndDateTime(enddt));
   writeln('Distance       : ', GetActivityDistance(dist));
-  writeln('Moving Time    : ', GetActivityTimeHMS(secs));
-  writeln('Total Time     : ', FormatDateTime('hh:nn:ss', enddt - startdt));
-  writeln('Rest Time      : ', FormatDateTime('hh:nn:ss', enddt -
+  writeln('Recorded Time  : ', GetActivityTimeHMS(secs));
+  writeln('Moving Time    : ', GetActivityMovingTimeHMS(movsecs));
+  writeln('Unrecorded Time: ', FormatDateTime('hh:nn:ss', enddt -
     startdt - secs / 86400));
+  writeln('Total Time     : ', FormatDateTime('hh:nn:ss', enddt - startdt));
   writeln('Number of laps : ', Length(Data.laps));
   writeln('Avg. Pace, Vel.: ', FormatDateTime('nn:ss', secs / (dist * 86400)),
     ' min/km, ',
     FormatFloat('#0.00 km/h', dist / secs * 3600));
+  writeln('Mov. Pace, Vel.: ', FormatDateTime('nn:ss', movsecs / (dist * 86400)),
+    ' min/km, ',
+    FormatFloat('#0.00 km/h', dist / movsecs * 3600));
   bestv := GetBestVelocity(lapnobest);
   if bestv = 0 then
     writeln('Best Pace, Vel.: - cannot be determined -')

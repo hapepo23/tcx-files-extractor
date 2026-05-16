@@ -4,7 +4,7 @@
 
 -----
 
-This console application, programmed in Free Pascal, extracts all essential (walking, running, hiking) activity information from all TCX files in the specified directories. It processes 1600 TCX files in 45 seconds (ThinkPad T14 Gen1, Intel Core i7-10610U CPU).
+This console application, programmed in Free Pascal, extracts all essential (walking, running, hiking) activity information from all TCX files in the specified directories. The application processes around 27 TCX files per second on a ThinkPad T14 Gen1 with Intel Core i7-10610U CPU - that's around 1600 files per minute.
 
 Usage:
 
