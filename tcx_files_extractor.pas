@@ -47,8 +47,7 @@ begin
       until FindNext(dirinfo) <> 0;
     FindClose(dirinfo);
   end;
-  Writeln('Finished TCX file search. Found ', filenames.Count,
-    ' TCX files.', LineEnding);
+  Writeln('Finished TCX file search. Found ', filenames.Count, ' TCX files.', LineEnding);
   filenames.Sort;
   for i := 1 to filenames.Count do
   begin

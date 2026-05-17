@@ -1,7 +1,6 @@
 unit read_tcx_file_unit;
 
 {$mode ObjFPC}{$H+}
-{$WARN 4105 off}
 
 interface
 
@@ -19,7 +18,6 @@ type
     laps: array of TLap;
     start_time: string;
     end_time: string;
-    moving_secs: double;
   end;
 
 function ReadTCXFile(filename: string): TTCXData;
@@ -27,10 +25,8 @@ function ReadTCXFile(filename: string): TTCXData;
 implementation
 
 uses
-  xmlread,
-  dom,
-  SysUtils,
-  DateUtils;
+  laz2_xmlread,
+  laz2_dom;
 
 function SetZeroIfEmpty(s: string): string;
 begin
@@ -43,10 +39,8 @@ end;
 function ReadTCXFile(filename: string): TTCXData;
 var
   doc: TXMLDocument;
-  node1, node2, node3, node4, node5, node6, node7: TDOMNode;
+  node1, node2, node3, node4, node5, node6: TDOMNode;
   lapno: integer = -1;
-  First: boolean = True;
-  firstdt, meters, prevmeters, secs, prevsecs, totalsecs: double;
 begin
   Result.laps := [];
   SetLength(Result.laps, 0);
@@ -122,56 +116,12 @@ begin
                 end;
               end;
             end;
+
           end;
           node3 := node3.NextSibling;
         end;
-        // ---- calc. moving time ------------------------
-        First := True;
-        node3 := node2.FirstChild; // <id> <lap> ...
-        prevmeters := 0;
-        prevsecs := 0;
-        totalsecs := 0;
-        while node3 <> nil do
-        begin
-          if node3.NodeName = 'Lap' then
-          begin
-            node4 := node3.FindNode('Track');
-            if node4 <> nil then
-            begin
-              node5 := node4.FirstChild; // <trackpoint> ...
-              while node5 <> nil do
-              begin
-                if node5.NodeName = 'Trackpoint' then
-                begin
-                  node6 := node5.FindNode('Time');
-                  node7 := node5.FindNode('DistanceMeters');
-                  if (node6 <> nil) and (node7 <> nil) then
-                  begin
-                    if First then
-                    begin
-                      firstdt := ISO8601ToDate(node6.TextContent, True);
-                      First := False;
-                    end;
-                    secs := 86400 * (ISO8601ToDate(node6.TextContent, True) - firstdt);
-                    meters := StrToFloat(node7.TextContent);
-                    if secs - prevsecs > 0.05 then
-                    begin
-                      if (meters - prevmeters) / (secs - prevsecs) > 0.5 then
-                        totalsecs += (secs - prevsecs);
-                    end;
-                    prevsecs := secs;
-                    prevmeters := meters;
-                  end;
-                end;
-                node5 := node5.NextSibling;  // next trackpoint
-              end;
-            end;
-          end;
-          node3 := node3.NextSibling; // next lap
-        end;
       end;
     end;
-    Result.moving_secs := totalsecs;
   finally
     doc.Free;
   end;
